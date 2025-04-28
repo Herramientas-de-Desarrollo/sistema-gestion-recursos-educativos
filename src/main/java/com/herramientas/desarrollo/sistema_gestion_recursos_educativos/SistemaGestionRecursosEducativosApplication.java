@@ -9,5 +9,5 @@ public class SistemaGestionRecursosEducativosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaGestionRecursosEducativosApplication.class, args);
 	}
-
+//Inicio del sistema
 }
