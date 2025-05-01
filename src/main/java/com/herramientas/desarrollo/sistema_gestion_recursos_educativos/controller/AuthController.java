@@ -7,6 +7,7 @@ import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usu
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("El correo ya está registrado.");
         }
 
-        // Crea usuario
+        // Creación del usuario en la bd
         Usuario usuario = new Usuario();
         usuario.setNombre(registerDTO.getNombre());
         usuario.setApellido(registerDTO.getApellido());
@@ -40,6 +41,9 @@ public class AuthController {
         return ResponseEntity.ok("Usuario registrado exitosamente.");
     }
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // Endpoint login
     @PostMapping("/login") // es solicitud post
     public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
@@ -47,7 +51,9 @@ public class AuthController {
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            if (usuario.getClave().equals(loginDTO.getClave())) {
+
+            // Comparación segura de la clave encriptada
+            if (passwordEncoder.matches(loginDTO.getClave(), usuario.getClave())) {
                 return ResponseEntity.ok("Login exitoso.");
             } else {
                 return ResponseEntity.status(401).body("Clave incorrecta.");
@@ -55,6 +61,15 @@ public class AuthController {
         } else {
             return ResponseEntity.status(404).body("Usuario no encontrado.");
         }
+    }
+
+
+    // Buscar usuario por correo (GET) (esto luego se cambiara a una clase especifica para estos casos)
+    @GetMapping("/buscar")
+    public ResponseEntity<Usuario> buscarPorCorreo(@RequestParam String correo) {
+        return usuarioRepository.findByCorreo(correo)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
 

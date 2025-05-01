@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository // es repositorio de Spring, se comunica con la base de datos
+@Repository //El repositorio de Spring, el cual se comunica con la BD
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // Buscar usuario por correo
+    // Buscamos el usuario por correo
     Optional<Usuario> findByCorreo(String correo);
 }
