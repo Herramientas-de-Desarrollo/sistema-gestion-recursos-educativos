@@ -2,58 +2,54 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.controll
 
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.LoginDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.RegisterDTO;
-import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Rol;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
-import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
+import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
-    // Endpoint register
-    @PostMapping("/register") // es solicitud post
-    public ResponseEntity<String> registerUser(@RequestBody RegisterDTO registerDTO) {
-        // Verifica si el correo ya existe
-        if (usuarioRepository.findByCorreo(registerDTO.getCorreo()).isPresent()) {
-            return ResponseEntity.badRequest().body("El correo ya está registrado.");
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // Registro de usuario
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody RegisterDTO dto) {
+        try {
+            Usuario usuario = new Usuario();
+            usuario.setNombre(dto.getNombre());
+            usuario.setApellido(dto.getApellido());
+            usuario.setCorreo(dto.getCorreo());
+            usuario.setClave(dto.getClave()); // Se encripta en el servicio
+            usuario.setRol(dto.getRolEnum()); // Método personalizado del DTO
+
+            usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.ok("Usuario registrado exitosamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        // Crea usuario
-        Usuario usuario = new Usuario();
-        usuario.setNombre(registerDTO.getNombre());
-        usuario.setApellido(registerDTO.getApellido());
-        usuario.setCorreo(registerDTO.getCorreo());
-        usuario.setClave(registerDTO.getClave()); // Falta encriptacion
-        usuario.setRol(Rol.valueOf(registerDTO.getRol().toUpperCase()));
-
-        // Guarda en la base de datos
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok("Usuario registrado exitosamente.");
     }
 
-    // Endpoint login
-    @PostMapping("/login") // es solicitud post
-    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByCorreo(loginDTO.getCorreo());
+    // Login de usuario
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginDTO dto) {
+        try {
+            Usuario usuario = usuarioService.obtenerPorCorreo(dto.getCorreo());
 
-        if (usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
-            if (usuario.getClave().equals(loginDTO.getClave())) {
+            if (passwordEncoder.matches(dto.getClave(), usuario.getClave())) {
                 return ResponseEntity.ok("Login exitoso.");
             } else {
                 return ResponseEntity.status(401).body("Clave incorrecta.");
             }
-        } else {
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 }
