@@ -16,9 +16,7 @@ public class SecurityConfig {
                 .csrf().disable() // desactivado para pruebas tmb ps
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Permite registrar y loguear sin autenticacion
-                .anyRequest().authenticated() // todo requiere que se loguee en una sesion para autenticar
-                .and()
-                .formLogin().disable(); // desactiva formulario default de spring security (opcional para pruebas ps)
+                .anyRequest().authenticated() ;// todo requiere que se loguee en una sesion para autenticar
 
         return http.build();
     }
