@@ -44,8 +44,10 @@ public class AuthController {
     // Login de usuario
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginDTO dto) {
+
         try {
             Usuario usuario = usuarioService.obtenerPorCorreo(dto.getCorreo());
+
 
             if (passwordEncoder.matches(dto.getClave(), usuario.getClave())) {
                 return ResponseEntity.ok("Login exitoso.");
