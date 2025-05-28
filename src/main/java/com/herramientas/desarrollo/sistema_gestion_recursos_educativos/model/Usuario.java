@@ -33,7 +33,9 @@ public class Usuario {
     @Enumerated(EnumType.STRING) // lo guarda como cadena de texto en la base de datos
     @Column(nullable = false)
     private Rol rol;
+}
 
+    /*
     public Long getId() {
         return id;
     }
@@ -81,4 +83,6 @@ public class Usuario {
     public void setClave(String clave) {
         this.clave = clave;
     }
-}
+
+*/
+
