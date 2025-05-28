@@ -26,7 +26,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() //IMPORTANTE permite el libre acceso a las rutas
-                        .anyRequest().authenticated()
+                        //.requestMatchers("/api/perfil/**").authenticated() // 🔒 Protege perfil
+                        .requestMatchers("/api/perfil/**").permitAll() // IMPORTANT permite acceso libre a las rutas
+                        .anyRequest().authenticated() // Todas las demás requieren auth
                 )
                 .httpBasic().disable() // si no se usa  autenticación básica
                 .formLogin().disable(); // IMPORTANTE si no hay login por formulario
@@ -53,6 +55,7 @@ public class SecurityConfig {
 
         return new CorsFilter(source);
     }
+}
 
     /*public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { 3RO fallo
         http
@@ -87,4 +90,4 @@ public class SecurityConfig {
         return http.build();
     }*/
 
-}
+
