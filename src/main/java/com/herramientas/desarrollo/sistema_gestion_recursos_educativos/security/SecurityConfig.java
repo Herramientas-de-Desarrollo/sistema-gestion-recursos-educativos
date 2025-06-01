@@ -27,7 +27,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() //IMPORTANTE permite el libre acceso a las rutas
                         //.requestMatchers("/api/perfil/**").authenticated() // 🔒 Protege perfil
-                        .requestMatchers("/api/perfil/**").permitAll() // IMPORTANT permite acceso libre a las rutas
+                        .requestMatchers("/api/perfil/**").permitAll()
+                        .requestMatchers("/api/recursos/**").permitAll()// IMPORTANT permite acceso libre a las rutas
                         .anyRequest().authenticated() // Todas las demás requieren auth
                 )
                 .httpBasic().disable() // si no se usa  autenticación básica
