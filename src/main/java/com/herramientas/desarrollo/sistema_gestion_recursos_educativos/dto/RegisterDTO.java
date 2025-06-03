@@ -14,7 +14,6 @@ public class RegisterDTO {
     private String clave;
     private String rol; // luego se convierte a Enum
 
-<<<<<<< HEAD
 
     public String getCorreo() {
         return correo;
@@ -24,11 +23,7 @@ public class RegisterDTO {
         return nombre;
     }
 
-=======
->>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
     public Rol getRolEnum() {
         return Rol.valueOf(this.rol.toUpperCase());
     }
 }
-
-

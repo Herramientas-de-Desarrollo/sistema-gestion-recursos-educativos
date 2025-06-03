@@ -1,12 +1,7 @@
 package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service;
 
-<<<<<<< HEAD
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
-=======
-import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
-import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
->>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

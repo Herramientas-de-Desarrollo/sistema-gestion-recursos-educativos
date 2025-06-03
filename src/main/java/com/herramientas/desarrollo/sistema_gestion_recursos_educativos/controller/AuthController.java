@@ -3,10 +3,7 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.controll
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.LoginDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.RegisterDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
-<<<<<<< HEAD
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
-=======
->>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     @Autowired
-<<<<<<< HEAD
-    private UsuarioService usuarioService;
-
-    @Autowired
-=======
->>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
     private PasswordEncoder passwordEncoder;
 
     // Registro de usuario
@@ -50,17 +44,11 @@ public class AuthController {
     // Login de usuario
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginDTO dto) {
-<<<<<<< HEAD
 
         try {
             Usuario usuario = usuarioService.obtenerPorCorreo(dto.getCorreo());
 
 
-=======
-        try {
-            Usuario usuario = usuarioService.obtenerPorCorreo(dto.getCorreo());
-
->>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
             if (passwordEncoder.matches(dto.getClave(), usuario.getClave())) {
                 return ResponseEntity.ok("Login exitoso.");
             } else {
