@@ -27,6 +27,15 @@ public class PerfilUsuarioService {
         return mapToDTO(perfil);
     }
 
+    public PerfilUsuarioResponseDTO obtenerPerfil(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + usuarioId));
+
+        PerfilUsuario perfil = perfilUsuarioRepository.findByUsuarioCorreo(usuario.getCorreo())
+                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+
+        return mapToDTO(perfil);
+    }
 
     public void crearPerfil(Long usuarioId, PerfilUsuarioCreateDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -67,6 +76,8 @@ public class PerfilUsuarioService {
         dto.setBiografia(perfil.getBiografia());
         dto.setIntereses(perfil.getIntereses());
         dto.setArea(perfil.getArea());
+        dto.setNombreUsuario(perfil.getUsuario().getNombre());
+        dto.setApellidoUsuario(perfil.getUsuario().getApellido());
         return dto;
     }
 }

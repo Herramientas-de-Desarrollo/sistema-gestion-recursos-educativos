@@ -3,7 +3,10 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.security
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+<<<<<<< HEAD
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+=======
+>>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -75,11 +78,10 @@ public class SecurityConfig {
                 .csrf().disable() // desactivado para pruebas tmb ps
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Permite registrar y loguear sin autenticacion
-                .anyRequest().authenticated() // todo requiere que se loguee en una sesion para autenticar
-                .and()
-                .formLogin().disable(); // desactiva formulario default de spring security (opcional para pruebas ps)
+                .anyRequest().authenticated() ;// todo requiere que se loguee en una sesion para autenticar
 
         return http.build();
+<<<<<<< HEAD
     }*/
 
     /*public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { 2DO fallo
@@ -92,3 +94,12 @@ public class SecurityConfig {
     }*/
 
 
+=======
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+>>>>>>> 104443c1c7d8a08ffab02c87aba826ac0158e7a3

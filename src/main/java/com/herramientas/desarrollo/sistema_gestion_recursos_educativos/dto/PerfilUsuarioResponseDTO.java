@@ -7,4 +7,7 @@ public class PerfilUsuarioResponseDTO {
     private String biografia;
     private String intereses;
     private String area;
+
+    private String nombreUsuario;
+    private String apellidoUsuario;
 }

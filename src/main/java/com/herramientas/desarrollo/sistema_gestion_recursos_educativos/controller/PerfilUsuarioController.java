@@ -25,6 +25,11 @@ public class PerfilUsuarioController {
         return ResponseEntity.ok(perfilUsuarioService.obtenerPerfil(correo));
     }
 
+    @GetMapping("/{usuarioId}")
+    public ResponseEntity<PerfilUsuarioResponseDTO> obtenerPerfil(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(perfilUsuarioService.obtenerPerfil(usuarioId));
+    }
+
     @PutMapping
     public ResponseEntity<Void> actualizarPerfil(@RequestBody PerfilUsuarioUpdateDTO dto, Authentication auth) {
         String correo = auth.getName();
