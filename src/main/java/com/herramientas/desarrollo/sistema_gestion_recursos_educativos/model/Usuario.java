@@ -1,6 +1,7 @@
 package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model;
 
 import jakarta.persistence.*;  // Anotacionaes JPA que hace que las clases de java pasen a tablas de base de datos automaticamente. Que pro.
+import java.util.List;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,56 +34,11 @@ public class Usuario {
     @Enumerated(EnumType.STRING) // lo guarda como cadena de texto en la base de datos
     @Column(nullable = false)
     private Rol rol;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private PerfilUsuario perfil;
+
+    // recursos creados
+    @OneToMany(mappedBy = "autor")
+    private List<RecursoEducativo> recursos;
 }
-
-    /*
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
-*/
-

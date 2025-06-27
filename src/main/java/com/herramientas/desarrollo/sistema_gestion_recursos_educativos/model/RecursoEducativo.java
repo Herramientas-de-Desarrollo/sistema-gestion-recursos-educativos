@@ -1,6 +1,7 @@
 package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Entity
@@ -17,6 +18,12 @@ public class RecursoEducativo {
     private String tipo; // "archivo" o "enlace"
     private String url;  // Enlace externo
     private String nombreArchivo; // Nombre del archivo subido (si aplica)
+
+    private LocalDateTime fechaPublicacion;
+
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

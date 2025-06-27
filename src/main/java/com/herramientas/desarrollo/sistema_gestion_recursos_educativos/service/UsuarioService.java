@@ -17,9 +17,6 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Registra un nuevo usuario si el correo no está en uso.
-     */
     public Usuario registrarUsuario(Usuario usuario) {
         Optional<Usuario> existente = usuarioRepository.findByCorreo(usuario.getCorreo());
 
@@ -34,9 +31,6 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    /**
-     * Devuelve un usuario por correo. Lanza excepción si no se encuentra.
-     */
     public Usuario obtenerPorCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con correo: " + correo));
