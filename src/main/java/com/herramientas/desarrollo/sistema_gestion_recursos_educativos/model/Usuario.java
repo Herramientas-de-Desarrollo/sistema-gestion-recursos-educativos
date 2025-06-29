@@ -3,16 +3,10 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model;
 import jakarta.persistence.*;  // Anotacionaes JPA que hace que las clases de java pasen a tablas de base de datos automaticamente. Que pro.
 import java.util.List;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity // Anotacion que esta clase es una entidad que se almacenara en la base de datos
 @Table(name = "usuarios") // Especifica la tabla donde se almacenara
 @Data // Lombok genera getters, setters, constructores, toString automaticamente. Que pro.
-
-
-@Getter
-@Setter
 
 public class Usuario {
 

@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 
 public class PerfilUsuarioUpdateDTO {
-
     private String biografia;
     private String intereses;
     private String area;

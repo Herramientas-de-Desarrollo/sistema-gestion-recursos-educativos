@@ -10,6 +10,7 @@ public class RecursoEducativoRespuestaDTO {
     private String tipo;
     private String url;
     private String nombreArchivo;
+    private String cursoNombre;
 
     private Long autorId;
     private String autorNombre;

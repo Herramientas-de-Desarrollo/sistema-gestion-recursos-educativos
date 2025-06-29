@@ -3,43 +3,49 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.controll
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.PerfilUsuarioCreateDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.PerfilUsuarioResponseDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.PerfilUsuarioUpdateDTO;
+import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service.PerfilUsuarioService;
+import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/perfil")
-
+@RequestMapping("/api/perfiles")
 public class PerfilUsuarioController {
 
-    private final PerfilUsuarioService perfilUsuarioService;
+    @Autowired
+    private PerfilUsuarioService perfilService;
 
-    public PerfilUsuarioController(PerfilUsuarioService perfilUsuarioService) {
-        this.perfilUsuarioService = perfilUsuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/mi-perfil")
+    public ResponseEntity<Void> crearPerfil(@RequestBody PerfilUsuarioCreateDTO dto) {
+        Usuario usuarioActual = usuarioService.obtenerUsuarioActual();
+        perfilService.crearPerfil(usuarioActual, dto);
+        return ResponseEntity.status(201).build(); // 201 Created
     }
 
-    @GetMapping
-    public ResponseEntity<PerfilUsuarioResponseDTO> obtenerPerfil(Authentication auth) {
-        String correo = auth.getName();
-        return ResponseEntity.ok(perfilUsuarioService.obtenerPerfil(correo));
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mi-perfil")
+    public ResponseEntity<PerfilUsuarioResponseDTO> obtenerPerfil() {
+        Usuario usuarioActual = usuarioService.obtenerUsuarioActual();
+        return ResponseEntity.ok(perfilService.obtenerPerfil(usuarioActual.getId()));
     }
 
-    @GetMapping("/{usuarioId}")
-    public ResponseEntity<PerfilUsuarioResponseDTO> obtenerPerfil(@PathVariable Long usuarioId) {
-        return ResponseEntity.ok(perfilUsuarioService.obtenerPerfil(usuarioId));
-    }
-
-    @PutMapping
-    public ResponseEntity<Void> actualizarPerfil(@RequestBody PerfilUsuarioUpdateDTO dto, Authentication auth) {
-        String correo = auth.getName();
-        perfilUsuarioService.actualizarPerfil(correo, dto);
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/actualizar-perfil")
+    public ResponseEntity<Void> actualizarPerfil(@RequestBody PerfilUsuarioUpdateDTO dto) {
+        Usuario usuarioActual = usuarioService.obtenerUsuarioActual();
+        perfilService.actualizarPerfil(usuarioActual, dto);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{usuarioId}")
-    public ResponseEntity<Void> crearPerfil(@PathVariable Long usuarioId, @RequestBody PerfilUsuarioCreateDTO dto) {
-        perfilUsuarioService.crearPerfil(usuarioId, dto);
-        return ResponseEntity.status(201).build(); // 201 Created
+    @GetMapping("/{usuarioid}")
+    public ResponseEntity<PerfilUsuarioResponseDTO> obtenerPerfil(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(perfilService.obtenerPerfil(usuarioId));
     }
 }

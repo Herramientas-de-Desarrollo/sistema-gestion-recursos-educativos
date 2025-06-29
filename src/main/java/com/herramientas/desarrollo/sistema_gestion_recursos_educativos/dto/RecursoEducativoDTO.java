@@ -7,12 +7,12 @@ import lombok.Data;
 
 @Data
 public class RecursoEducativoDTO {
-
     private String titulo;
     private String descripcion;
     private String tipo; // "archivo" o "enlace"
     private String url;  // Si es enlace externo
-    private Long autorId;
+    private String nombreArchivo;
+    private String cursoNombre;
 
     // Solo si es tipo "archivo"
     private MultipartFile archivo;

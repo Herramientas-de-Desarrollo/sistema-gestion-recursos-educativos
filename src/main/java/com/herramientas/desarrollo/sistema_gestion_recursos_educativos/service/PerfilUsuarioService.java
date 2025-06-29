@@ -7,42 +7,21 @@ import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Per
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.PerfilUsuarioRepository;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PerfilUsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final PerfilUsuarioRepository perfilUsuarioRepository;
+    @Autowired
+    private PerfilUsuarioRepository perfilRepository;
 
-    public PerfilUsuarioService(UsuarioRepository usuarioRepository, PerfilUsuarioRepository perfilUsuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.perfilUsuarioRepository = perfilUsuarioRepository;
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public PerfilUsuarioResponseDTO obtenerPerfil(String correo) {
-        PerfilUsuario perfil = perfilUsuarioRepository.findByUsuarioCorreo(correo)
-                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
-
-        return mapToDTO(perfil);
-    }
-
-    public PerfilUsuarioResponseDTO obtenerPerfil(Long usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + usuarioId));
-
-        PerfilUsuario perfil = perfilUsuarioRepository.findByUsuarioCorreo(usuario.getCorreo())
-                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
-
-        return mapToDTO(perfil);
-    }
-
-    public void crearPerfil(Long usuarioId, PerfilUsuarioCreateDTO dto) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + usuarioId));
-
+    public void crearPerfil(Usuario usuario , PerfilUsuarioCreateDTO dto) {
         // Verifica si ya tiene un perfil
-        if (perfilUsuarioRepository.findByUsuarioCorreo(usuario.getCorreo()).isPresent()) {
+        if (perfilRepository.findByUsuarioCorreo(usuario.getCorreo()).isPresent()) {
             throw new RuntimeException("Este usuario ya tiene un perfil.");
         }
 
@@ -52,15 +31,11 @@ public class PerfilUsuarioService {
         perfil.setIntereses(dto.getIntereses());
         perfil.setArea(dto.getArea());
 
-        perfilUsuarioRepository.save(perfil);
+        perfilRepository.save(perfil);
     }
 
-
-    public void actualizarPerfil(String correo, PerfilUsuarioUpdateDTO dto) {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        PerfilUsuario perfil = perfilUsuarioRepository.findByUsuarioCorreo(correo)
+    public PerfilUsuario actualizarPerfil(Usuario usuario, PerfilUsuarioUpdateDTO dto) {
+        PerfilUsuario perfil = perfilRepository.findByUsuarioCorreo(usuario.getCorreo())
                 .orElse(new PerfilUsuario());
 
         perfil.setUsuario(usuario);
@@ -68,7 +43,17 @@ public class PerfilUsuarioService {
         perfil.setIntereses(dto.getIntereses());
         perfil.setArea(dto.getArea());
 
-        perfilUsuarioRepository.save(perfil);
+        return perfilRepository.save(perfil);
+    }
+
+    public PerfilUsuarioResponseDTO obtenerPerfil(Long usuarioid) {
+        Usuario usuario = usuarioRepository.findById(usuarioid)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        PerfilUsuario perfil = perfilRepository.findById(usuario.getPerfil().getId())
+                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+
+        return mapToDTO(perfil);
     }
 
     private PerfilUsuarioResponseDTO mapToDTO(PerfilUsuario perfil) {

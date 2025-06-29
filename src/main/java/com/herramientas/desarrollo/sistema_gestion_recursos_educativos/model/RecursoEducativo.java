@@ -17,7 +17,7 @@ public class RecursoEducativo {
     private String descripcion;
     private String tipo; // "archivo" o "enlace"
     private String url;  // Enlace externo
-    private String nombreArchivo; // Nombre del archivo subido (si aplica)
+    private String nombreArchivo;
 
     private LocalDateTime fechaPublicacion;
 
