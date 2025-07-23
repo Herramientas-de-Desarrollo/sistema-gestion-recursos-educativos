@@ -3,6 +3,7 @@ package com.herramientas.desarrollo.sistema_gestion_recursos_educativos.service;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.RecursoEducativoDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.dto.RecursoEducativoRespuestaDTO;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Curso;
+import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.DetalleRecurso;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.RecursoEducativo;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.model.Usuario;
 import com.herramientas.desarrollo.sistema_gestion_recursos_educativos.repository.CursoRepository;
@@ -30,9 +31,10 @@ public class RecursoEducativoService {
 
     public void crearRecurso(Usuario autor, RecursoEducativoDTO dto) throws IOException {
         RecursoEducativo recurso = new RecursoEducativo();
+        DetalleRecurso detalleRecurso = new DetalleRecurso();
 
         recurso.setTitulo(dto.getTitulo());
-        recurso.setDescripcion(dto.getDescripcion());
+        //recurso.setDescripcion(dto.getDescripcion());
         recurso.setTipo(dto.getTipo());
         recurso.setFechaPublicacion(LocalDateTime.now());
         recurso.setAutor(autor);
@@ -43,14 +45,14 @@ public class RecursoEducativoService {
         recurso.setCurso(curso);
 
         if ("enlace".equalsIgnoreCase(dto.getTipo())) {
-            recurso.setUrl(dto.getUrl());
+            //recurso.setUrl(dto.getUrl());
         } else if ("archivo".equalsIgnoreCase(dto.getTipo())) {
             // Guardar archivo
             String nombreArchivo = (dto.getArchivo().getOriginalFilename());
             Path rutaDestino = Paths.get("uploads", nombreArchivo);
             Files.createDirectories(rutaDestino.getParent());
             Files.copy(dto.getArchivo().getInputStream(), rutaDestino, StandardCopyOption.REPLACE_EXISTING);
-            recurso.setNombreArchivo(nombreArchivo);
+            //recurso.setNombreArchivo(nombreArchivo);
         }
 
         recursoRepository.save(recurso);
@@ -110,10 +112,10 @@ public class RecursoEducativoService {
         RecursoEducativoRespuestaDTO dto = new RecursoEducativoRespuestaDTO();
         dto.setId(recurso.getId());
         dto.setTitulo(recurso.getTitulo());
-        dto.setDescripcion(recurso.getDescripcion());
+        //dto.setDescripcion(recurso.getDescripcion());
         dto.setTipo(recurso.getTipo());
-        dto.setUrl(recurso.getUrl());
-        dto.setNombreArchivo(recurso.getNombreArchivo());
+        //dto.setUrl(recurso.getUrl());
+        //dto.setNombreArchivo(recurso.getNombreArchivo());
 
         if (recurso.getAutor() != null) {
             dto.setAutorId(recurso.getAutor().getId());

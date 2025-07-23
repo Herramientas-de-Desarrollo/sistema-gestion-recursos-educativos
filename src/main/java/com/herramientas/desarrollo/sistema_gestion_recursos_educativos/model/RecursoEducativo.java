@@ -8,16 +8,12 @@ import lombok.Data;
 @Table(name = "recursos_educativos")
 @Data
 public class RecursoEducativo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String titulo;
-    private String descripcion;
     private String tipo; // "archivo" o "enlace"
-    private String url;  // Enlace externo
-    private String nombreArchivo;
 
     private LocalDateTime fechaPublicacion;
 
